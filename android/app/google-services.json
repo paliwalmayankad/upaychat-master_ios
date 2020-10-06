@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "86395118249",
+    "firebase_url": "https://upaychat-eed41.firebaseio.com",
+    "project_id": "upaychat-eed41",
+    "storage_bucket": "upaychat-eed41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86395118249:android:48d43ad5e8cd00ff977fb8",
+        "android_client_info": {
+          "package_name": "com.abstractcompany.upaychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86395118249-moaloopk6lacpgqlktu4cnqm36o88g4q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abstractcompany.upaychat",
+            "certificate_hash": "fc4c512cae04c7ef2a135ea3710b792dfd58d761"
+          }
+        },
+        {
+          "client_id": "86395118249-kffaok3g3lru1g2u955cq2t2d94fbc6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9V1oO5YigOiJGoJcjoyej3rjmg9ZnN20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86395118249-kffaok3g3lru1g2u955cq2t2d94fbc6p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "86395118249-2a5a6gp16qom760p4h862jnq1onetrmq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abstract.upaychat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
