@@ -25,6 +25,8 @@ class TransactionHistoryState extends State<TransactionHistory> with SingleTicke
   bool isdata=false;
   String msg;
   List<Transcationdata> transcationlist;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
   @override
   void dispose() {
     super.dispose();
@@ -39,6 +41,19 @@ class TransactionHistoryState extends State<TransactionHistory> with SingleTicke
 
 
   }
+  Future<Null> _refresh() async {
+    //Holding pull to refresh loader widget for 2 sec.
+    //You can fetch data from server.
+    await new Future.delayed(const Duration(seconds: 2));
+    transcationlist.clear();
+    setState(() {
+      isdata=false;
+      isloaded=false;
+    });
+    _callapiforpendingfile();
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -57,29 +72,32 @@ class TransactionHistoryState extends State<TransactionHistory> with SingleTicke
                 margin:  EdgeInsets.only(top: 2,bottom: 10,left: 5,right: 5),
                 child: isloaded==true? Container(padding: EdgeInsets.only(top: 3,bottom: 3,left: 2,right: 2),
                     child:
-                    isloaded==true&&isdata==true?  ListView.builder(
-                        itemCount:transcationlist.length,
-                        shrinkWrap: true,
+                    isloaded==true&&isdata==true? RefreshIndicator(
+                        key: _refreshIndicatorKey,
+                        onRefresh: _refresh,
+                        child:  ListView.builder(
+                            itemCount:transcationlist.length,
+                            shrinkWrap: true,
 
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context,index){
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context,index){
 
-                          return Container(decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(4.0))),padding: EdgeInsets.only(top: 5,bottom: 5,left: 5,right: 5),margin:  EdgeInsets.only(top: 5,bottom: 0,left: 0,right: 0),child: Column(children: <Widget>[Row(children: <Widget>[
-                            /*Expanded(
+                              return Container(decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0))),padding: EdgeInsets.only(top: 5,bottom: 5,left: 5,right: 5),margin:  EdgeInsets.only(top: 5,bottom: 0,left: 0,right: 0),child: Column(children: <Widget>[Row(children: <Widget>[
+                                /*Expanded(
 
                       child:
 
                       Align( alignment: Alignment.centerLeft,child:
                       Image.asset(CustomImages.selected_bell,height: 30,width: 30,))),*/
 
-                            Expanded(flex:6,child:
-                            Align( alignment: Alignment.topLeft,child:Text(transcationlist[index].message,textAlign: TextAlign.left,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),))),
+                                Expanded(flex:6,child:
+                                Align( alignment: Alignment.topLeft,child:Text(transcationlist[index].message,textAlign: TextAlign.left,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),))),
 
-                          ],),
-                            Container(alignment: Alignment.centerRight,child: Text(CustomUiWidgets.timesagofeacture(transcationlist[index].timestamp),textAlign: TextAlign.left,style: TextStyle(color: MyColors.grey_color,fontSize: 12),),)
-                          ],));}):Text(msg,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),)
+                              ],),
+                                Container(alignment: Alignment.centerRight,child: Text(CustomUiWidgets.timesagofeacture(transcationlist[index].timestamp),textAlign: TextAlign.left,style: TextStyle(color: MyColors.grey_color,fontSize: 12),),)
+                              ],));})):Text(msg,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),)
 
 
 

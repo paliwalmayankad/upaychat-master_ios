@@ -41,6 +41,7 @@ class HomeFileState extends State<HomeFile>
   bool ispublicdata=false;
   bool isfriendsdata=false;
   AppLifecycleState _notification;
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void dispose() {
@@ -61,6 +62,27 @@ class HomeFileState extends State<HomeFile>
     _calltranscationapi();
     _callmywalletapi();
   }
+  Future<Null> onrefresh() async{
+    //Holding pull to refresh loader widget for 2 sec.
+    //You can fetch data from server.
+    await new Future.delayed(const Duration(seconds: 2));
+    totaltranslist.clear();
+    publictranslist.clear();
+    privatetranslist.clear();
+    friendslist.clear();
+
+    setState(() {
+      isloading=false;
+      isprivatedata=false;
+      ispublicdata=false;
+      isfriendsdata=false;
+    });
+    _calltranscationapi();
+    _callmywalletapi();
+    return null;
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -195,6 +217,7 @@ class HomeFileState extends State<HomeFile>
                 InkWell(
                   onTap: (){
                     Navigator.of(context).pop();
+                    _callmywalletapi();
                     Navigator.of(context).pushNamed("/wallet");
 
                   },child: Container(child:Row(  children: <Widget>[
@@ -289,15 +312,14 @@ class HomeFileState extends State<HomeFile>
     return Container(
         child:Column(children: <Widget>[
           _createmyheader(context),
-          isloading==true?
-          Expanded(flex:1,child:  SingleChildScrollView(
-
-              child:Column(children: <Widget>[
-                publictranspressed==true? Container(
-                  margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
-                  child: isloading==true&&ispublicdata==true? ListView.separated(
+          Expanded(child: isloading==true?
+          Column(children: <Widget>[
+            publictranspressed==true? Expanded(child:Container(
+              margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
+              child: isloading==true&&ispublicdata==true? RefreshIndicator(onRefresh: onrefresh,
+                  key: refreshKey,child:ListView.separated(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+
                     scrollDirection: Axis.vertical,
                     itemCount: publictranslist.length,
                     separatorBuilder: (BuildContext context, int index) => Divider( height: 3, color: MyColors.grey_color),
@@ -438,12 +460,13 @@ class HomeFileState extends State<HomeFile>
 
                         ],)),
 
-                      );},):Text('No Data found',style:TextStyle (fontFamily: 'Doomsday'),),
+                      );},)):Text('No Data found',style:TextStyle (fontFamily: 'Doomsday'),),
 
-                ):SizedBox(),
-                privatepressed==true? Container(
-                  margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
-                  child:isloading==true&&isfriendsdata==true?ListView.separated(
+            )):SizedBox(),
+            privatepressed==true? Expanded(child:Container(
+              margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
+              child:isloading==true&&isfriendsdata==true?RefreshIndicator(onRefresh: onrefresh,
+                  key: refreshKey,child:ListView.separated(
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.vertical,
@@ -583,15 +606,16 @@ class HomeFileState extends State<HomeFile>
 
                       ],)),
 
-                    );},):Text('No Data found',
-                    style: TextStyle(fontFamily: 'Doomsday'),),
+                    );},)):Text('No Data found',
+                style: TextStyle(fontFamily: 'Doomsday'),),
 
-                ):SizedBox(),
-                personalpressed==true? Container(
-                  margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
-                  child: isloading==true&&isprivatedata==true?ListView.separated(
+            )):SizedBox(),
+            personalpressed==true?Expanded(child: Container(
+              margin: EdgeInsets.only(top: 5,bottom: 5,left: 3,right: 3),
+              child: isloading==true&&isprivatedata==true?RefreshIndicator(onRefresh: onrefresh,
+                  key: refreshKey,child:ListView.separated(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+
 
                     scrollDirection: Axis.vertical,
                     itemCount: privatetranslist.length,
@@ -733,11 +757,11 @@ class HomeFileState extends State<HomeFile>
 
                       ],)),
 
-                    );},):Text('No Data found',style: TextStyle(fontFamily: 'Doomsday'),),
+                    );},)):Text('No Data found',style: TextStyle(fontFamily: 'Doomsday'),),
 
-                ):SizedBox(),
-              ],)))
-              :Container(child: Center(child: CommonUtills.progressdialogbox(),)),
+            )):SizedBox(),
+          ],)
+              :Container(child: Center(child: CommonUtills.progressdialogbox(),))),
         ],)
 
     );

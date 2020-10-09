@@ -19,6 +19,7 @@ import 'package:upaychat/CommonUtills/string_files.dart';
 import 'package:upaychat/CustomWidgets/custom_images.dart';
 import 'package:upaychat/CustomWidgets/my_colors.dart';
 import 'package:upaychat/Pages/login_file.dart';
+import 'package:upaychat/Pages/splash_screen_sec.dart';
 import 'package:upaychat/Validationandapi/changepasswordvalidation.dart';
 import 'package:upaychat/Validationandapi/loginvalidation_api.dart';
 import 'package:upaychat/Validationandapi/registervalidation_api.dart';
@@ -43,9 +44,12 @@ class CustomUiWidgets {
   }
 
   static Container SplashScreenSecHeader(){
-    return Container(margin: EdgeInsets.only(top: 20),color: MyColors.base_green_color,
-      alignment: Alignment.center, width: double.infinity,height: 80,
-      child: Text('Upaychat',textAlign:TextAlign.center,style: TextStyle(fontSize: 22,color: Colors.white,fontWeight: FontWeight.bold,fontFamily: 'Doomsday'),),);
+    return Container(margin: EdgeInsets.only(top: 0),color: MyColors.base_green_color,
+      alignment: Alignment.center, width: double.infinity,height: 100,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Text('Upaychat',textAlign:TextAlign.center,style: TextStyle(fontSize: 22,color: Colors.white,fontWeight: FontWeight.bold,fontFamily: 'Doomsday'),),
+      ),);
   }
 
   static Container splashscreen_sec_bottomsheet_loginregister(BuildContext context){
@@ -145,9 +149,11 @@ class CustomUiWidgets {
                 borderRadius:     BorderRadius.circular(0.0),
               ),
               onPressed:(){
-                /*Navigator.of(context).pop();
-                Navigator.of(context).pop();*/
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+               // Navigator.of(context).pop();
+               // Navigator.of(context).pop();*/
+                //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                Route route = MaterialPageRoute(builder: (context) => SplashScreenSec());
+                Navigator.pushReplacement(context, route);
               },
               child: Text('Cancel',style: TextStyle(fontFamily: 'Doomsday',fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
             ),),
@@ -3431,7 +3437,7 @@ margin: EdgeInsets.only(left: 10,right: 10),
   static String timesagofeacture(String fromdate,[BuildContext context]){
     try {
 
-      Locale myLocale = Localizations.localeOf(context);
+     // Locale myLocale = Localizations.localeOf(context);
 var myDate = DateTime.parse(fromdate).toLocal();
       print('timeZoneName'+myDate.toString());
        const DATE_FORMAT = 'dd/MMM/yyyy HH:mm:ss';

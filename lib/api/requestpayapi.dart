@@ -15,8 +15,8 @@ class RequestforPayapi{
     return _netUtil.post(base_token_url,
       body: {
         "transactionId":requestid,
-        "privacy":requestid,
-        "caption":requestid
+        "privacy":privacy,
+        "caption":caption
 
       }, ).then((dynamic res) {
       CommonModels results = new CommonModels.map(res);

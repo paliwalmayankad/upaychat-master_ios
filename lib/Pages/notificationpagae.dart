@@ -20,12 +20,28 @@ class NotificationState extends State<NotificationFile>
   bool isloaded=false;
   bool isdata=false;
   String msg;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     notificationlist=new List();
     _callnotificationdata();
+  }
+  Future<Null> _refresh() async {
+    //Holding pull to refresh loader widget for 2 sec.
+    //You can fetch data from server.
+    await new Future.delayed(const Duration(seconds: 2));
+    notificationlist.clear();
+
+    setState(() {
+      isloaded=false;
+      isdata=false;
+    });
+    _callnotificationdata();
+    return null;
   }
 
   @override
@@ -123,7 +139,9 @@ class NotificationState extends State<NotificationFile>
                 margin:  EdgeInsets.only(top: 2,bottom: 10,left: 5,right: 5),
                 child: isloaded==true? Container(padding: EdgeInsets.only(top: 3,bottom: 3,left: 2,right: 2),
                     child:
-                    isloaded==true&&isdata==true?  ListView.builder(
+                    isloaded==true&&isdata==true?  RefreshIndicator(
+                        key: _refreshIndicatorKey,
+                        onRefresh: _refresh,child: ListView.builder(
                         itemCount:notificationlist.length,
                         shrinkWrap: true,
 
@@ -145,7 +163,7 @@ class NotificationState extends State<NotificationFile>
 
                           ],),
                             Container(alignment: Alignment.centerRight,child: Text(CustomUiWidgets.timesagofeacture(notificationlist[index].timestamp),textAlign: TextAlign.left,style: TextStyle(color: MyColors.grey_color,fontSize: 12),),)
-                          ],));}):Text(msg,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),)
+                          ],));})):Text(msg,style: TextStyle(fontFamily: 'Doomsday',color: Colors.black,fontSize: 16),)
 
 
 

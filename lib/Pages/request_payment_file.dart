@@ -27,6 +27,21 @@ class RequestPaymentFileState extends State<RequestPaymentFile> {
   bool isprivacypublic = true;
   bool isprivacyfriends = false;
   bool isisprivacyprivate= false;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
+  Future<Null> _refresh() async {
+    //Holding pull to refresh loader widget for 2 sec.
+    //You can fetch data from server.
+    await new Future.delayed(const Duration(seconds: 2));
+    pendingrequest.clear();
+
+    setState(() {
+      isloaded=false;
+      isdata=false;
+    });
+    _callapiforpendingfile();
+    return null;
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -44,9 +59,11 @@ class RequestPaymentFileState extends State<RequestPaymentFile> {
 
 
         isloaded==true?   Container(
-          height: double.infinity,
+            height: double.infinity,
             color: MyColors.base_green_color_20,
-            child: isdata==true?ListView.builder(
+            child: isdata==true?RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: _refresh,child:ListView.builder(
                 itemCount:pendingrequest.length
                 ,
                 shrinkWrap: true,
@@ -146,7 +163,7 @@ class RequestPaymentFileState extends State<RequestPaymentFile> {
                                         },
                                         child: Text('cancel',style: TextStyle(fontFamily: 'Doomsday',fontSize: 14,color: MyColors.base_green_color),),
                                       ),)),
-                                    (userid==pendingrequest[index].touser_id )? Expanded(child:    Container(
+                                    (userid!=pendingrequest[index].touser_id )? Expanded(child:    Container(
                                       width:double.infinity,
                                       margin: EdgeInsets.only(left: 4,right: 4),
                                       child:   FlatButton(
@@ -181,7 +198,7 @@ class RequestPaymentFileState extends State<RequestPaymentFile> {
 
                       )),
                     ],),
-                  );}):Container(child: Center(child: Text('NO Request Found',style: TextStyle(fontFamily: 'Doomsday',color: MyColors.grey_color,fontSize: 18,fontWeight: FontWeight.bold),),))):Container(child: Center(child: CommonUtills.progressdialogbox(),))
+                  );})):Container(child: Center(child: Text('NO Request Found',style: TextStyle(fontFamily: 'Doomsday',color: MyColors.grey_color,fontSize: 18,fontWeight: FontWeight.bold),),))):Container(child: Center(child: CommonUtills.progressdialogbox(),))
     );
   }
 
@@ -257,7 +274,7 @@ class RequestPaymentFileState extends State<RequestPaymentFile> {
     {
       CommonUtills.showprogressdialogcomplete(context, true);
       RequestforPayapi _requestrequestapi =new RequestforPayapi();
-      CommonModels results=await _requestrequestapi.search(listdata.id.toString(),privacy,listdata.message);
+      CommonModels results=await _requestrequestapi.search(listdata.id.toString(),privacy,listdata.caption);
       if(results.status=="true"){
         CommonUtills.showprogressdialogcomplete(context, false);
         CommonUtills.successtoast(context,results.message);

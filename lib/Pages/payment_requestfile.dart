@@ -1,6 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:upaychat/CommonUtills/prefrences_manager.dart';
 import 'package:upaychat/CustomWidgets/custom_images.dart';
 import 'package:upaychat/CustomWidgets/custom_ui_widgets.dart';
@@ -106,7 +107,12 @@ padding: EdgeInsets.only(left: 8,right: 3),
                   Expanded(flex:4,child:Text(widget.username,style: TextStyle(fontFamily: 'Doomsday',color: MyColors.base_green_color),)),
                   Expanded( flex:1,child:Row(children:<Widget> [Text(StringMessage.dollar,style: TextStyle(fontSize: 16,fontFamily: 'Doomsday',color: Colors.black)
                     ,),Expanded(child:  TextFormField(
+                    enableInteractiveSelection: false,
+
                     textAlign: TextAlign.center,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
                     cursorColor: MyColors.base_green_color,
                     controller: amountcontroller,
                     keyboardType: TextInputType.number,

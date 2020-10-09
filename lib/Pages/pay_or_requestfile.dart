@@ -112,10 +112,14 @@ padding: EdgeInsets.only(left: 6,right: 3),
                   Expanded( flex:1,child:Row(children: <Widget>[Text(StringMessage.dollar,style: TextStyle(fontSize: 16,fontFamily: 'Doomsday',color: Colors.black)
                     ,),Expanded(child: TextFormField(
                     textAlign: TextAlign.center,
+                    enableInteractiveSelection: false,
                     style: TextStyle(fontFamily: 'Doomsday'),
                     controller: amountcontroller,
                     keyboardType: TextInputType.number,
                     cursorColor: MyColors.base_green_color,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
